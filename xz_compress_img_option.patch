@@ -1,0 +1,77 @@
+diff -U 3 -H -d -r -N -- appliance-tools-007.8/appcreate/appliance.py appliance-tools-007.8.new/appcreate/appliance.py
+--- appliance-tools-007.8/appcreate/appliance.py	2014-04-26 23:24:35.000000000 +0800
++++ appliance-tools-007.8.new/appcreate/appliance.py	2016-02-08 22:53:50.514319832 +0800
+@@ -43,7 +43,7 @@
+ 
+     """
+ 
+-    def __init__(self, ks, name, disk_format, vmem, vcpu):
++    def __init__(self, ks, name, disk_format, vmem, vcpu, compress):
+         """Initialize a ApplianceImageCreator instance.
+ 
+         This method takes the same arguments as ImageCreator.__init__()
+@@ -55,6 +55,7 @@
+         self.__imgdir = None
+         self.__disks = {}
+         self.__disk_format = disk_format
++        self.__compress = compress
+ 
+         #appliance parameters
+         self.vmem = vmem
+@@ -627,18 +628,24 @@
+             self._convert_image()
+         #else move to _outdir
+         else:
+-            logging.debug("moving disks to stage location")
+-            for name in self.__disks.keys():
+-                rc = subprocess.call(["xz", "-z", "%s/%s-%s.%s" %(self.__imgdir, self.name, name, self.__disk_format)])
+-                if rc == 0:
+-                    logging.debug("compression successful")
+-                if rc != 0:
+-                    raise CreatorError("Unable to compress disk to %s" % self.__disk_format)
++            logging.debug("xz disk image compression set to: %s" % (self.__compress))
++            if self.__compress == "no":
++                for name in self.__disks.keys():
++                    src = "%s/%s-%s.%s" % (self.__imgdir, self.name, name, self.__disk_format)
++                    dst = "%s/%s-%s.%s" % (self._outdir, self.name, name, self.__disk_format)
++            else:
++                for name in self.__disks.keys():
++                    rc = subprocess.call(["xz", "-z", "%s/%s-%s.%s" %(self.__imgdir, self.name, name, self.__disk_format)])
++                    if rc == 0:
++                        logging.debug("compression successful")
++                    if rc != 0:
++                        raise CreatorError("Unable to compress disk to %s" % self.__disk_format)
++                    src = "%s/%s-%s.%s.xz" % (self.__imgdir, self.name, name, self.__disk_format)
++                    dst = "%s/%s-%s.%s.xz" % (self._outdir, self.name, name, self.__disk_format)
+ 
+-                src = "%s/%s-%s.%s.xz" % (self.__imgdir, self.name, name, self.__disk_format)
+-                dst = "%s/%s-%s.%s.xz" % (self._outdir, self.name, name, self.__disk_format)
+-                logging.debug("moving %s to %s" % (src, dst))
+-                shutil.move(src, dst)
++        logging.debug("moving disks to stage location")
++        logging.debug("moving %s to %s" % (src, dst))
++        shutil.move(src, dst)        
+         #write meta data in stage dir
+         self._write_image_xml()
+ 
+diff -U 3 -H -d -r -N -- appliance-tools-007.8/tools/appliance-creator appliance-tools-007.8.new/tools/appliance-creator
+--- appliance-tools-007.8/tools/appliance-creator	2014-04-26 23:24:35.000000000 +0800
++++ appliance-tools-007.8.new/tools/appliance-creator	2016-02-08 22:51:39.869128524 +0800
+@@ -57,6 +57,8 @@
+                       help=("Generate a checksum for the created appliance"))
+     appopt.add_option("-f", "--format", type="string", dest="disk_format", default="raw",
+                       help="Disk format (default: raw)")
++    appopt.add_option("", "--compress", type="string", dest="compress", default="no",
++                      help="Compress raw disk image using xz (default: no)")
+     parser.add_option_group(appopt)
+     
+     
+@@ -129,7 +131,7 @@
+     if options.name:
+         name = options.name
+             
+-    creator = appcreate.ApplianceImageCreator(ks, name, options.disk_format, options.vmem, options.vcpu)
++    creator = appcreate.ApplianceImageCreator(ks, name, options.disk_format, options.vmem, options.vcpu, options.compress)
+     creator.tmpdir = options.tmpdir
+     creator.checksum = options.checksum
+ 

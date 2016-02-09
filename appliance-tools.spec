@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -17,6 +17,7 @@ URL: http://thincrust.org/
 #  make dist
 Source0: appliance-tools-%{version}.tar.bz2
 Patch0: appliance-tools-nss.hack
+Patch1: xz_compress_img_option.patch
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
@@ -36,6 +37,7 @@ See http://thincrust.net for more details.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 make
@@ -63,6 +65,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Tue Feb 09 2016 Vaughan <devel at agrez dot net> - 007.8-6
+- RPi2 is too slow at compressing the final raw image to 'xz':
+  Add patch to optionally enable 'xz' disk image compression (patch1)
+
 * Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 007.8-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
