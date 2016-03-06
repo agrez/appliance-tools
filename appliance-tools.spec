@@ -15,7 +15,7 @@ URL: http://thincrust.org/
 #  cd appliance-tools
 #  git checkout appliance-tools-007.8
 #  make dist
-Source0: https://git.fedorahosted.org/cgit/appliance-tools.git/snapshot/appliance-tools-master.tar.gz#/appliance-tools-007.8.tar.gz
+Source0: https://git.fedorahosted.org/cgit/appliance-tools.git/snapshot/appliance-tools-master.tar.gz
 Patch0: appliance-tools-nss.hack
 Patch1: xz_compress_img_option.patch
 Requires: livecd-tools >= 020 curl rsync kpartx
@@ -35,7 +35,8 @@ derived distributions such as RHEL, CentOS and others.
 See http://thincrust.net for more details.
 
 %prep
-%setup -q
+%setup -q -n appliance-tools-master
+
 %patch0 -p1
 %patch1 -p1
 
