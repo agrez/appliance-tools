@@ -15,7 +15,7 @@ URL: http://thincrust.org/
 #  cd appliance-tools
 #  git checkout appliance-tools-007.8
 #  make dist
-Source0: appliance-tools-%{version}.tar.bz2
+Source0: https://git.fedorahosted.org/cgit/appliance-tools.git/snapshot/appliance-tools-master.tar.gz#/appliance-tools-007.8.tar.gz
 Patch0: appliance-tools-nss.hack
 Patch1: xz_compress_img_option.patch
 Requires: livecd-tools >= 020 curl rsync kpartx
@@ -92,7 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 - use a slightly different path for extlinux-bootloader package
 
 * Mon Feb 10 2014 Dennis Gilmore <dennis@ausil.us> - 007.5-1
-- arm needs extlinux-bootloader to provide for extlinux support 
+- arm needs extlinux-bootloader to provide for extlinux support
 - not syslinux-extlinux
 
 * Mon Aug 26 2013 Dennis Gilmore <dennis@ausil.us> - 007.4-1
@@ -197,7 +197,7 @@ rm -rf $RPM_BUILD_ROOT
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
 *Mon Jul 07 2009 David Huff <dhuff@redhat.com> -004.4
-- added functionality include additional modules in ramdisk 
+- added functionality include additional modules in ramdisk
 
 *Mon Dec 01 2008 David Huff <dhuff@redhat.com> -004.2
 - changed form ExclusiveArch to EcludeArch to fix broken deps
@@ -242,7 +242,7 @@ rm -rf $RPM_BUILD_ROOT
 - Merged ec2-converter code (jboggs)
 
 *Tue Aug 26 2008 David Huff <dhuff@redhat.com> - 003-3
-- release 3 fixes minor build errors 
+- release 3 fixes minor build errors
 
 * Wed Jul 09 2008 David Huff <dhuff@redhat.com> - 003-1
 - version 003 is build for latest version of livecd-tools with patches
