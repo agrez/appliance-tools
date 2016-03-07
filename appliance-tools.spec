@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -66,6 +66,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Sun Mar 06 2016 mrjoshuap <jpreston at redhat dot com> - 007.8-7
+- Remove archive from repository
+
 * Tue Feb 09 2016 Vaughan <devel at agrez dot net> - 007.8-6
 - RPi2 is too slow at compressing the final raw image to 'xz':
   Add patch to optionally enable 'xz' disk image compression (patch1)
