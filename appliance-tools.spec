@@ -5,10 +5,10 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 7%{?dist}
+Release: 8%{?dist}
 License: GPLv2
 Group: System Environment/Base
-URL: http://thincrust.org/
+URL: https://git.fedorahosted.org/git/appliance-tools.git
 # The source for this package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
 #  git clone git://git.fedorahosted.org/appliance-tools
@@ -18,11 +18,13 @@ URL: http://thincrust.org/
 Source0: https://git.fedorahosted.org/cgit/appliance-tools.git/snapshot/appliance-tools-master.tar.gz
 Patch0: appliance-tools-nss.hack
 Patch1: xz_compress_img_option.patch
+Patch2: set-releasever.patch
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 Requires: xz
 Requires: xfsprogs
+Requires: sssd-client
 BuildRequires: python
 BuildRequires: /usr/bin/pod2man
 BuildArch: noarch
@@ -32,13 +34,13 @@ ExcludeArch: ppc64 s390 s390x
 %description
 Tools for generating appliance images on Fedora based systems including
 derived distributions such as RHEL, CentOS and others.
-See http://thincrust.net for more details.
 
 %prep
 %setup -q -n appliance-tools-master
 
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 make
@@ -66,6 +68,11 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Fri Jun 17 2016 Vaughan <devel at agrez dot net> - 007.8-8
+- Add dependency on sssd-client
+- Remove thincrust.org references
+- Add patch so that $releasever is recognised in kickstart repo files.
+
 * Sun Mar 06 2016 mrjoshuap <jpreston at redhat dot com> - 007.8-7
 - Remove archive from repository
 
