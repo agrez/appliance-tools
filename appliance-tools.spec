@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 8%{?dist}
+Release: 11%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://git.fedorahosted.org/git/appliance-tools.git
@@ -19,6 +19,7 @@ Source0: https://git.fedorahosted.org/cgit/appliance-tools.git/snapshot/applianc
 Patch0: appliance-tools-nss.hack
 Patch1: xz_compress_img_option.patch
 Patch2: set-releasever.patch
+Patch3: appliance-tools-partitioning-fixes.patch
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
@@ -41,6 +42,7 @@ derived distributions such as RHEL, CentOS and others.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 make
@@ -68,6 +70,12 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Fri Jun 17 2016 Vaughan <devel at agrez dot net> - 007.8-11
+- Sync with upstream release (Patch3)
+  * Allow 4 primary partitions
+  * Set boot partition as bootable
+- Bump release
+
 * Fri Jun 17 2016 Vaughan <devel at agrez dot net> - 007.8-8
 - Add dependency on sssd-client
 - Remove thincrust.org references
